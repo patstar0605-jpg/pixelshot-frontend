@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelShot — Upload Your Photos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8; --charcoal: #1A1A1A; --warm-black: #111010;
+    --gold: #C9A84C; --gold-light: #E8C97A; --soft-white: #FAFAF7;
+    --muted: #7A7468; --border: #E2DDD4; --error: #C0392B; --success: #27AE60;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px; border-bottom: 1px solid var(--border);
+    background: rgba(245,240,232,0.95); backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; text-decoration: none; color: var(--charcoal); }
+  .nav-logo span { color: var(--gold); }
+  .nav-step { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+  .progress-bar { height: 3px; background: var(--border); }
+  .progress-fill { height: 100%; background: var(--gold); width: 33%; transition: width 0.5s ease; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 60px 24px; }
+
+  .page-header { text-align: center; margin-bottom: 52px; }
+  .step-indicator {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--warm-black); color: var(--gold);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
+  }
+  h1 { font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 12px; }
+  h1 em { font-style: normal; color: var(--gold); }
+  .page-sub { font-size: 1rem; color: var(--muted); line-height: 1.7; max-width: 500px; margin: 0 auto; }
+
+  /* STYLE SELECTOR */
+  .style-section { margin-bottom: 44px; }
+  .section-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .style-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .style-card {
+    border: 2px solid var(--border); border-radius: 12px; padding: 16px 12px;
+    cursor: pointer; text-align: center; transition: all 0.2s; background: var(--soft-white);
+    position: relative;
+  }
+  .style-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .style-card.selected { border-color: var(--gold); background: #FDF8EE; }
+  .style-card.selected::after {
+    content: '✓'; position: absolute; top: 8px; right: 10px;
+    color: var(--gold); font-weight: 700; font-size: 0.85rem;
+  }
+  .style-emoji { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+  .style-name { font-size: 0.85rem; font-weight: 600; color: var(--charcoal); margin-bottom: 3px; }
+  .style-desc { font-size: 0.75rem; color: var(--muted); }
+
+  /* DROPZONE */
+  .upload-section { margin-bottom: 44px; }
+  .dropzone {
+    border: 2px dashed var(--border); border-radius: 16px;
+    padding: 52px 32px; text-align: center; cursor: pointer;
+    transition: all 0.25s; background: var(--soft-white); position: relative;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--gold); background: #FDF8EE; }
+  .dropzone-icon { font-size: 2.8rem; margin-bottom: 16px; display: block; }
+  .dropzone h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+  .dropzone p { font-size: 0.875rem; color: var(--muted); margin-bottom: 20px; }
+  .dropzone-btn {
+    display: inline-block; background: var(--charcoal); color: var(--cream);
+    padding: 11px 24px; border-radius: 7px; font-size: 0.875rem; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .dropzone-btn:hover { background: var(--gold); color: var(--charcoal); }
+  #fileInput { display: none; }
+  .file-formats { margin-top: 14px; font-size: 0.75rem; color: var(--muted); }
+
+  /* PREVIEW GRID */
+  .preview-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px;
+  }
+  .preview-item {
+    aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+    position: relative; background: var(--border);
+  }
+  .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .preview-remove {
+    position: absolute; top: 5px; right: 5px;
+    background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer;
+    width: 22px; height: 22px; border-radius: 50%; font-size: 0.7rem;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .preview-item:hover .preview-remove { opacity: 1; }
+  .preview-add {
+    aspect-ratio: 1; border-radius: 8px; border: 2px dashed var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1.4rem; color: var(--muted);
+    transition: all 0.2s;
+  }
+  .preview-add:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* COUNTER */
+  .photo-counter {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 16px; padding: 12px 16px; background: var(--soft-white);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .counter-text { font-size: 0.875rem; color: var(--muted); }
+  .counter-num { font-weight: 700; color: var(--charcoal); }
+  .counter-num.good { color: var(--success); }
+  .counter-num.warn { color: var(--gold); }
+  .counter-bar { width: 120px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .counter-fill { height: 100%; background: var(--border); border-radius: 3px; transition: all 0.3s; }
+  .counter-fill.warn { background: var(--gold); }
+  .counter-fill.good { background: var(--success); }
+
+  /* TIPS */
+  .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 44px; }
+  .tip-card {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 14px 16px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--soft-white);
+  }
+  .tip-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 0.82rem; line-height: 1.55; color: var(--muted); }
+  .tip-text strong { color: var(--charcoal); display: block; margin-bottom: 2px; }
+  .tip-card.good { border-color: #A8D5B5; background: #F4FBF6; }
+  .tip-card.bad { border-color: #F5C6C1; background: #FDF4F3; }
+
+  /* SUBMIT */
+  .submit-section { text-align: center; }
+  .submit-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--charcoal); color: var(--cream);
+    padding: 16px 40px; border-radius: 10px;
+    font-size: 1rem; font-weight: 600; border: none; cursor: pointer;
+    transition: all 0.25s; width: 100%; justify-content: center; max-width: 420px;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--gold); color: var(--charcoal); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .submit-note { font-size: 0.8rem; color: var(--muted); margin-top: 12px; }
+
+  /* LOADING STATE */
+  .processing-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(17,16,16,0.92); z-index: 200;
+    align-items: center; justify-content: center; flex-direction: column; gap: 24px;
+    text-align: center; padding: 32px;
+  }
+  .processing-overlay.active { display: flex; }
+  .spinner { width: 56px; height: 56px; border: 3px solid #333; border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--cream); }
+  .processing-sub { font-size: 0.9rem; color: #888; max-width: 360px; line-height: 1.6; }
+  .processing-steps { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .proc-step { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #666; }
+  .proc-step.active { color: var(--gold); }
+  .proc-step.done { color: var(--success); }
+  .proc-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .container { padding: 36px 20px; }
+    h1 { font-size: 1.9rem; }
+    .style-grid { grid-template-columns: repeat(2, 1fr); }
+    .preview-grid { grid-template-columns: repeat(4, 1fr); }
+    .tips-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Pixel<span>Shot</span></a>
+  <span class="nav-step">Step 1 of 3 — Upload photos</span>
+</nav>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="step-indicator">✦ Upload Your Photos</div>
+    <h1>Let's build your<br><em>AI model.</em></h1>
+    <p class="page-sub">Upload 10–20 clear photos of your face. The more variety, the better your results.</p>
+  </div>
+
+  <!-- STYLE SELECTOR -->
+  <div class="style-section">
+    <div class="section-title">Choose your style</div>
+    <div class="style-grid">
+      <div class="style-card selected" onclick="selectStyle(this, 'professional')">
+        <span class="style-emoji">👔</span>
+        <div class="style-name">Professional</div>
+        <div class="style-desc">Suit & tie, office</div>
+      </div>
+      <div class="style-card" onclick="selectStyle(this, 'casual')">
+        <span class="style-emoji">😎</span>
+        <div class="style-name">Casual</div>
+        <div class="style-desc">Smart casual, LinkedIn</div>
+      </div>
+      <div class="style-card" onclick="selectStyle(this, 'creative')">
+        <span class="style-emoji">🎨</span>
+        <div class="style-name">Creative</div>
+        <div class="style-desc">Bold, artistic vibes</div>
+      </div>
+      <div class="style-card" onclick="selectStyle(this, 'executive')">
+        <span class="style-emoji">💼</span>
+        <div class="style-name">Executive</div>
+        <div class="style-desc">C-suite, authoritative</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips-grid">
+    <div class="tip-card good">
+      <span class="tip-icon">✅</span>
+      <div class="tip-text"><strong>Do this</strong>Clear face, good lighting, various angles, different outfits, solo shots</div>
+    </div>
+    <div class="tip-card good">
+      <span class="tip-icon">✅</span>
+      <div class="tip-text"><strong>Great photos</strong>Daylight photos, neutral backgrounds, no heavy filters, looking at camera</div>
+    </div>
+    <div class="tip-card bad">
+      <span class="tip-icon">❌</span>
+      <div class="tip-text"><strong>Avoid these</strong>Sunglasses, hats covering face, heavy makeup, blurry or dark images</div>
+    </div>
+    <div class="tip-card bad">
+      <span class="tip-icon">❌</span>
+      <div class="tip-text"><strong>Skip group photos</strong>Only photos where your face is the clear subject — no crowds or distractions</div>
+    </div>
+  </div>
+
+  <!-- DROPZONE -->
+  <div class="upload-section">
+    <div class="section-title">Upload photos (10–20 recommended)</div>
+    <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+      <span class="dropzone-icon">📸</span>
+      <h3>Drop your photos here</h3>
+      <p>Or click to browse from your device</p>
+      <span class="dropzone-btn">Browse Photos</span>
+      <div class="file-formats">Supports JPG, PNG, HEIC, WEBP · Max 10MB each</div>
+    </div>
+    <input type="file" id="fileInput" multiple accept="image/*">
+
+    <div class="preview-grid" id="previewGrid" style="display:none"></div>
+
+    <div class="photo-counter" id="photoCounter">
+      <span class="counter-text">Photos uploaded: <span class="counter-num" id="counterNum">0</span> / 20</span>
+      <div class="counter-bar"><div class="counter-fill" id="counterFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="submit-btn" id="submitBtn" disabled onclick="startProcessing()">
+      <span>🚀</span> Generate My Headshots
+    </button>
+    <p class="submit-note">🔒 Your photos are encrypted and deleted after 3 hours · 100% money-back guarantee</p>
+  </div>
+</div>
+
+<!-- PROCESSING OVERLAY -->
+<div class="processing-overlay" id="processingOverlay">
+  <div class="spinner"></div>
+  <div class="processing-title">Creating your AI model…</div>
+  <div class="processing-sub">This takes about 3–4 hours. We'll email you when your headshots are ready!</div>
+  <div class="processing-steps">
+    <div class="proc-step active" id="step1"><div class="proc-dot"></div> Uploading your photos securely</div>
+    <div class="proc-step" id="step2"><div class="proc-dot"></div> Training your personal AI model</div>
+    <div class="proc-step" id="step3"><div class="proc-dot"></div> Generating headshots</div>
+    <div class="proc-step" id="step4"><div class="proc-dot"></div> Quality check & delivery</div>
+  </div>
+</div>
+
+<script>
+  let uploadedFiles = [];
+  let selectedStyle = 'professional';
+
+  function selectStyle(card, style) {
+    document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedStyle = style;
+  }
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault(); dropzone.classList.remove('dragover');
+    handleFiles(Array.from(e.dataTransfer.files));
+  });
+  fileInput.addEventListener('change', e => handleFiles(Array.from(e.target.files)));
+
+  function handleFiles(files) {
+    const imageFiles = files.filter(f => f.type.startsWith('image/'));
+    uploadedFiles = [...uploadedFiles, ...imageFiles].slice(0, 20);
+    updatePreview();
+    updateCounter();
+  }
+
+  function updatePreview() {
+    const grid = document.getElementById('previewGrid');
+    grid.style.display = uploadedFiles.length ? 'grid' : 'none';
+    grid.innerHTML = '';
+    uploadedFiles.forEach((file, i) => {
+      const url = URL.createObjectURL(file);
+      const item = document.createElement('div');
+      item.className = 'preview-item';
+      item.innerHTML = `<img src="${url}" alt="Photo ${i+1}"><button class="preview-remove" onclick="removeFile(${i})">×</button>`;
+      grid.appendChild(item);
+    });
+    if (uploadedFiles.length < 20) {
+      const add = document.createElement('div');
+      add.className = 'preview-add';
+      add.innerHTML = '+';
+      add.onclick = () => fileInput.click();
+      grid.appendChild(add);
+    }
+  }
+
+  function removeFile(index) {
+    uploadedFiles.splice(index, 1);
+    updatePreview(); updateCounter();
+  }
+
+  function updateCounter() {
+    const count = uploadedFiles.length;
+    const num = document.getElementById('counterNum');
+    const fill = document.getElementById('counterFill');
+    const btn = document.getElementById('submitBtn');
+    const pct = Math.min((count / 20) * 100, 100);
+    num.textContent = count;
+    fill.style.width = pct + '%';
+    num.className = 'counter-num' + (count >= 10 ? ' good' : count >= 5 ? ' warn' : '');
+    fill.className = 'counter-fill' + (count >= 10 ? ' good' : count >= 5 ? ' warn' : '');
+    btn.disabled = count < 10;
+    document.getElementById('progressFill').style.width = count >= 10 ? '66%' : '33%';
+  }
+
+  function startProcessing() {
+    document.getElementById('processingOverlay').classList.add('active');
+    // Simulate step progression (in real app, these update via websocket/polling)
+    setTimeout(() => {
+      document.getElementById('step1').className = 'proc-step done';
+      document.getElementById('step2').className = 'proc-step active';
+    }, 2000);
+    // In production: POST to /api/jobs with FormData containing files + style
+    // Then redirect to results page when job completes
+    setTimeout(() => window.location.href = 'results.html', 4000);
+  }
+</script>
+</body>
+</html>

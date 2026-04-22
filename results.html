@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelShot — Your Headshots Are Ready!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8; --charcoal: #1A1A1A; --warm-black: #111010;
+    --gold: #C9A84C; --gold-light: #E8C97A; --soft-white: #FAFAF7;
+    --muted: #7A7468; --border: #E2DDD4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px; border-bottom: 1px solid var(--border);
+    background: rgba(245,240,232,0.95); backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; text-decoration: none; color: var(--charcoal); }
+  .nav-logo span { color: var(--gold); }
+
+  .hero-banner {
+    background: var(--warm-black); padding: 56px 60px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-banner::before {
+    content: '✦'; position: absolute; font-size: 20rem; color: rgba(201,168,76,0.04);
+    top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
+  }
+  .ready-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,168,76,0.15); color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
+  }
+  .hero-banner h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900; color: var(--cream); margin-bottom: 12px; letter-spacing: -0.02em;
+  }
+  .hero-banner h1 em { font-style: normal; color: var(--gold); }
+  .hero-banner p { font-size: 1rem; color: #888; max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
+  .download-all-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--gold); color: var(--warm-black);
+    padding: 14px 32px; border-radius: 9px; font-weight: 700; font-size: 0.95rem;
+    text-decoration: none; transition: all 0.25s; border: none; cursor: pointer;
+  }
+  .download-all-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .share-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 18px; border-radius: 7px; font-size: 0.82rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s; cursor: pointer; border: 1px solid;
+  }
+  .share-linkedin { background: #0A66C2; color: white; border-color: #0A66C2; }
+  .share-linkedin:hover { background: #0855A0; }
+  .share-copy { background: transparent; color: #888; border-color: #333; }
+  .share-copy:hover { color: var(--cream); border-color: #666; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex; justify-content: center; gap: 48px;
+    padding: 28px 60px; background: #181717; border-bottom: 1px solid #222;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-n { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--gold); }
+  .stat-l { font-size: 0.78rem; color: #666; margin-top: 2px; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 24px 60px; border-bottom: 1px solid var(--border);
+    background: var(--soft-white);
+  }
+  .filter-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-right: 6px; }
+  .filter-btn {
+    padding: 7px 16px; border-radius: 6px; font-size: 0.82rem; font-weight: 600;
+    border: 1.5px solid var(--border); background: white; color: var(--muted);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); }
+  .filter-btn.gold-btn.active { background: var(--gold); color: var(--charcoal); border-color: var(--gold); }
+  .spacer { flex: 1; }
+  .view-toggle { display: flex; gap: 4px; }
+  .view-btn { width: 34px; height: 34px; border-radius: 6px; border: 1.5px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.2s; font-size: 0.9rem; }
+  .view-btn.active { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); }
+
+  /* GALLERY */
+  .gallery-container { padding: 32px 60px; }
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+    transition: all 0.3s;
+  }
+  .gallery-grid.large { grid-template-columns: repeat(3, 1fr); }
+
+  .photo-card {
+    border-radius: 12px; overflow: hidden; position: relative;
+    aspect-ratio: 3/4; background: var(--border); cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .photo-card:hover { transform: scale(1.02); box-shadow: 0 16px 48px rgba(0,0,0,0.15); }
+  .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-overlay {
+    position: absolute; inset: 0; background: rgba(17,16,16,0);
+    transition: background 0.25s; display: flex; flex-direction: column;
+    justify-content: space-between; padding: 12px;
+  }
+  .photo-card:hover .photo-overlay { background: rgba(17,16,16,0.5); }
+  .fav-btn {
+    align-self: flex-end; width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); border: none; cursor: pointer;
+    color: white; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s, background 0.2s; backdrop-filter: blur(4px);
+  }
+  .photo-card:hover .fav-btn { opacity: 1; }
+  .fav-btn.favorited { opacity: 1; color: var(--gold); background: rgba(0,0,0,0.4); }
+  .photo-actions {
+    display: flex; gap: 8px; opacity: 0; transition: opacity 0.2s;
+  }
+  .photo-card:hover .photo-actions { opacity: 1; }
+  .action-btn {
+    flex: 1; padding: 8px; border-radius: 6px; border: none; cursor: pointer;
+    font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .dl-btn { background: var(--gold); color: var(--charcoal); }
+  .dl-btn:hover { background: var(--gold-light); }
+  .style-tag {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(17,16,16,0.7); color: #ccc;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+    backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.2s;
+  }
+  .photo-card:hover .style-tag { opacity: 1; }
+
+  /* Placeholder headshot styles */
+  .hs-1 { background: linear-gradient(160deg, #2c3e50, #4a6741, #2c3e50); }
+  .hs-2 { background: linear-gradient(160deg, #1a1a2e, #16213e, #0f3460); }
+  .hs-3 { background: linear-gradient(160deg, #2d1b69, #11998e, #38ef7d); }
+  .hs-4 { background: linear-gradient(160deg, #373b44, #4286f4, #373b44); }
+  .hs-5 { background: linear-gradient(160deg, #4a3728, #8b5e3c, #4a3728); }
+  .hs-6 { background: linear-gradient(160deg, #1a1a1a, #4a4a4a, #1a1a1a); }
+  .hs-7 { background: linear-gradient(160deg, #0d3349, #1a6b8a, #0d3349); }
+  .hs-8 { background: linear-gradient(160deg, #2c1810, #8b3a1e, #2c1810); }
+  .photo-placeholder { width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+  .ph-figure { width: 70%; opacity: 0.25; }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+    padding: 32px;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox-inner { position: relative; max-width: 500px; width: 100%; }
+  .lightbox-img { width: 100%; border-radius: 14px; display: block; }
+  .lightbox-close {
+    position: absolute; top: -16px; right: -16px;
+    background: var(--charcoal); color: var(--cream); border: none;
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-actions { display: flex; gap: 10px; margin-top: 14px; }
+  .lb-btn {
+    flex: 1; padding: 12px; border-radius: 8px; border: none; cursor: pointer;
+    font-weight: 600; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .lb-dl { background: var(--gold); color: var(--charcoal); }
+  .lb-dl:hover { background: var(--gold-light); }
+  .lb-fav { background: #2a2a2a; color: #ccc; }
+  .lb-fav:hover { color: var(--gold); }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.5); color: white; border: none;
+    width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(0,0,0,0.8); }
+  .lb-prev { left: -52px; }
+  .lb-next { right: -52px; }
+
+  /* Feedback banner */
+  .feedback-banner {
+    margin: 0 60px 24px; padding: 16px 20px; border-radius: 10px;
+    background: #FDF8EE; border: 1px solid #E8D59A;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .feedback-banner span { font-size: 1rem; }
+  .feedback-text { flex: 1; font-size: 0.87rem; color: var(--charcoal); }
+  .feedback-text strong { display: block; }
+  .feedback-link { font-size: 0.82rem; color: var(--gold); font-weight: 600; text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .hero-banner, .stats-row, .filter-bar, .gallery-container { padding-left: 20px; padding-right: 20px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid.large { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { gap: 24px; }
+    .feedback-banner { margin: 0 20px 20px; }
+    .lb-prev, .lb-next { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Pixel<span>Shot</span></a>
+  <a href="#" class="download-all-btn" style="padding:9px 18px;font-size:0.85rem" onclick="alert('Downloading all 40 photos as ZIP...')">⬇ Download All</a>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="hero-banner">
+  <div class="ready-badge">✦ Ready to download</div>
+  <h1>Your headshots are<br><em>here.</em></h1>
+  <p>40 AI-generated professional headshots across 2 styles — ready to use on LinkedIn, your website, or anywhere you need to look your best.</p>
+  <button class="download-all-btn" onclick="alert('Downloading all 40 photos as ZIP...')">⬇ Download All 40 Photos</button>
+  <div class="share-row">
+    <a href="#" class="share-btn share-linkedin">in Update LinkedIn →</a>
+    <button class="share-btn share-copy" onclick="copyLink()">🔗 Copy share link</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat"><div class="stat-n">40</div><div class="stat-l">Photos generated</div></div>
+  <div class="stat"><div class="stat-n">2</div><div class="stat-l">Unique styles</div></div>
+  <div class="stat"><div class="stat-n">4K</div><div class="stat-l">Resolution</div></div>
+  <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Commercial use</div></div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" onclick="filterGallery('all', this)">All (40)</button>
+  <button class="filter-btn" onclick="filterGallery('professional', this)">👔 Professional</button>
+  <button class="filter-btn" onclick="filterGallery('casual', this)">😎 Casual</button>
+  <button class="filter-btn gold-btn" onclick="filterGallery('favorites', this)">★ Favorites</button>
+  <div class="spacer"></div>
+  <div class="view-toggle">
+    <button class="view-btn active" onclick="setView('small', this)">⊞</button>
+    <button class="view-btn" onclick="setView('large', this)">⊟</button>
+  </div>
+</div>
+
+<!-- FEEDBACK BANNER -->
+<div class="feedback-banner">
+  <span>🎉</span>
+  <div class="feedback-text">
+    <strong>Happy with your results?</strong>
+    Leave a review and get 20 bonus headshots free.
+  </div>
+  <a href="#" class="feedback-link">Write a review →</a>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-container">
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-inner" id="lightboxInner">
+    <button class="lightbox-nav lb-prev" onclick="navLightbox(-1)">‹</button>
+    <button class="lightbox-nav lb-next" onclick="navLightbox(1)">›</button>
+    <div class="photo-placeholder" style="aspect-ratio:3/4;border-radius:14px" id="lightboxBg">
+      <svg class="ph-figure" viewBox="0 0 120 180" fill="none"><ellipse cx="60" cy="52" rx="32" ry="38" fill="rgba(255,255,255,0.15)"/><rect x="15" y="95" width="90" height="85" rx="12" fill="rgba(255,255,255,0.08)"/></svg>
+    </div>
+    <button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('active')">×</button>
+    <div class="lightbox-actions">
+      <button class="lb-btn lb-dl" onclick="alert('Downloading full-res image...')">⬇ Download Full Res</button>
+      <button class="lb-btn lb-fav" id="lbFavBtn" onclick="toggleFavFromLightbox()">★ Favourite</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const styles = ['Professional','Professional','Casual','Casual'];
+  const bgs = ['hs-1','hs-2','hs-3','hs-4','hs-5','hs-6','hs-7','hs-8'];
+  const favorites = new Set();
+  let currentIdx = 0;
+
+  const photos = Array.from({length: 40}, (_, i) => ({
+    id: i, style: i % 2 === 0 ? 'professional' : 'casual',
+    bg: bgs[i % bgs.length], label: i % 2 === 0 ? '👔 Professional' : '😎 Casual'
+  }));
+
+  let filtered = [...photos];
+
+  function renderGallery(items) {
+    const grid = document.getElementById('galleryGrid');
+    grid.innerHTML = '';
+    items.forEach((photo, i) => {
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+      card.dataset.id = photo.id;
+      card.dataset.idx = i;
+      const isFav = favorites.has(photo.id);
+      card.innerHTML = `
+        <div class="photo-placeholder ${photo.bg}">
+          <svg class="ph-figure" viewBox="0 0 120 180" fill="none">
+            <ellipse cx="60" cy="52" rx="32" ry="38" fill="rgba(255,255,255,0.15)"/>
+            <rect x="15" y="95" width="90" height="85" rx="12" fill="rgba(255,255,255,0.08)"/>
+          </svg>
+        </div>
+        <div class="photo-overlay">
+          <button class="fav-btn ${isFav ? 'favorited' : ''}" onclick="toggleFav(event, ${photo.id}, this)">
+            ${isFav ? '★' : '☆'}
+          </button>
+          <div class="photo-actions">
+            <button class="action-btn dl-btn" onclick="event.stopPropagation(); alert('Downloading...')">⬇ Save</button>
+          </div>
+        </div>
+        <div class="style-tag">${photo.label}</div>`;
+      card.addEventListener('click', () => openLightbox(i));
+      grid.appendChild(card);
+    });
+  }
+
+  function toggleFav(e, id, btn) {
+    e.stopPropagation();
+    if (favorites.has(id)) { favorites.delete(id); btn.textContent = '☆'; btn.classList.remove('favorited'); }
+    else { favorites.add(id); btn.textContent = '★'; btn.classList.add('favorited'); }
+  }
+
+  function filterGallery(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (type === 'all') filtered = [...photos];
+    else if (type === 'favorites') filtered = photos.filter(p => favorites.has(p.id));
+    else filtered = photos.filter(p => p.style === type);
+    renderGallery(filtered);
+  }
+
+  function setView(size, btn) {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const grid = document.getElementById('galleryGrid');
+    grid.classList.toggle('large', size === 'large');
+  }
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    const lb = document.getElementById('lightbox');
+    const bg = document.getElementById('lightboxBg');
+    const photo = filtered[idx];
+    bg.className = `photo-placeholder ${photo.bg}`;
+    bg.style.cssText = 'aspect-ratio:3/4;border-radius:14px';
+    lb.classList.add('active');
+    document.getElementById('lbFavBtn').textContent = favorites.has(photo.id) ? '★ Unfavourite' : '☆ Favourite';
+  }
+
+  function navLightbox(dir) {
+    currentIdx = (currentIdx + dir + filtered.length) % filtered.length;
+    openLightbox(currentIdx);
+  }
+
+  function toggleFavFromLightbox() {
+    const photo = filtered[currentIdx];
+    if (favorites.has(photo.id)) { favorites.delete(photo.id); document.getElementById('lbFavBtn').textContent = '☆ Favourite'; }
+    else { favorites.add(photo.id); document.getElementById('lbFavBtn').textContent = '★ Unfavourite'; }
+  }
+
+  function closeLightbox(e) {
+    if (e.target === document.getElementById('lightbox')) document.getElementById('lightbox').classList.remove('active');
+  }
+
+  function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => alert('Link copied!'));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').classList.contains('active')) {
+      if (e.key === 'ArrowLeft') navLightbox(-1);
+      if (e.key === 'ArrowRight') navLightbox(1);
+      if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
+    }
+  });
+
+  renderGallery(photos);
+</script>
+</body>
+</html>
