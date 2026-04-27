@@ -140,7 +140,7 @@
       border-color: var(--accent);
       background: rgba(124,92,252,0.05);
     }
-    .dropzone-icon { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+    .dropzone-icon { width: 40px; height: 40px; display: block; margin: 0 auto 1rem; color: var(--muted); }
     .dropzone h3 {
       font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;
     }
@@ -239,7 +239,7 @@
     }
     .tip-card.good { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.05); }
     .tip-card.bad  { border-color: rgba(248,113,113,0.25); background: rgba(248,113,113,0.05); }
-    .tip-icon { font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+    .tip-icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
     .tip-body { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
     .tip-body strong { display: block; margin-bottom: 2px; font-size: 0.83rem; }
     .tip-card.good .tip-body strong { color: var(--green); }
@@ -340,7 +340,7 @@
 
   <!-- HEADER -->
   <div class="page-header">
-    <div class="step-badge">✦ Step 1 — Upload Photos</div>
+    <div class="step-badge">Step 1 — Upload Photos</div>
     <h1>Build your <span>AI headshot model</span></h1>
     <p>Upload 10–20 clear photos of your face. More variety = better results.</p>
   </div>
@@ -349,7 +349,7 @@
   <div class="section-gap">
     <span class="section-label">Upload photos — 10 minimum, 20 recommended</span>
     <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
-      <span class="dropzone-icon">📸</span>
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
       <h3>Drop your photos here</h3>
       <p>Or click to browse from your device</p>
       <span class="dropzone-btn">Browse Photos</span>
@@ -361,7 +361,6 @@
 
     <div class="photo-counter" id="photoCounter">
       <div class="counter-left">
-        <span class="counter-icon">🖼</span>
         <span class="counter-text">
           <span class="counter-num low" id="counterNum">0</span> / 20 photos
         </span>
@@ -380,28 +379,28 @@
     <span class="section-label">Photo tips — better photos = better results</span>
     <div class="tips-grid">
       <div class="tip-card good">
-        <span class="tip-icon">✅</span>
+        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
         <div class="tip-body">
           <strong>Good lighting</strong>
           Natural daylight or soft indoor light. Face clearly visible, no harsh shadows.
         </div>
       </div>
       <div class="tip-card good">
-        <span class="tip-icon">✅</span>
+        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
         <div class="tip-body">
           <strong>Variety of angles</strong>
           Front, slight left, slight right. Different outfits and backgrounds.
         </div>
       </div>
       <div class="tip-card bad">
-        <span class="tip-icon">❌</span>
+        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
         <div class="tip-body">
           <strong>No sunglasses or hats</strong>
           Your face must be fully visible. No accessories that cover your eyes or hair.
         </div>
       </div>
       <div class="tip-card bad">
-        <span class="tip-icon">❌</span>
+        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
         <div class="tip-body">
           <strong>No group photos</strong>
           Solo shots only. No other people in frame — the AI trains on your face alone.
@@ -413,10 +412,10 @@
   <!-- GENERATE -->
   <div class="generate-wrap">
     <button class="generate-btn" id="generateBtn" disabled onclick="startProcessing()">
-      <span>⚡</span> Generate My Headshots
+      Generate My Headshots
     </button>
     <p class="generate-note">
-      🔒 Photos deleted after 24 hours &nbsp;·&nbsp; 100% money-back guarantee
+      Photos deleted after 24 hours &nbsp;·&nbsp; 100% money-back guarantee
     </p>
   </div>
 
