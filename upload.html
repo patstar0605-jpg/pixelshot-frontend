@@ -261,8 +261,16 @@
       user-select: none;
       position: relative;
     }
-    .style-opt:hover { border-color: rgba(124,92,252,0.5); transform: translateY(-2px); }
+    .style-opt:hover:not(.locked) { border-color: rgba(124,92,252,0.5); transform: translateY(-2px); }
     .style-opt.selected { border-color: var(--accent); }
+    .style-opt.locked { opacity: 0.35; cursor: not-allowed; }
+    .plan-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(124,92,252,0.12); border: 1px solid rgba(124,92,252,0.3);
+      color: #b39dff; padding: 0.35rem 0.9rem; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em;
+      margin-bottom: 0.85rem; display: block; text-align: center;
+    }
     .style-opt img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
     .style-opt-body { padding: 0.75rem 0.6rem 0.8rem; text-align: center; }
     .style-opt-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
@@ -384,7 +392,8 @@
 
   <!-- STYLE SELECTION -->
   <div class="section-gap">
-    <span class="section-label">Choose your style — select 1 to 4</span>
+    <span class="section-label" id="styleLabel">Choose your style</span>
+    <p class="plan-badge" id="planBadge"></p>
     <div class="style-select-grid" id="styleGrid">
       <div class="style-opt" data-style="classy" onclick="toggleStyle(this)">
         <img src="Classy.png" alt="Classy headshot style" />
@@ -515,16 +524,38 @@
   let files = [];
   let selectedStyles = [];
 
+  const planAllowed = parseInt(new URLSearchParams(location.search).get('plan')) || 4;
+  const planNames = { 1: 'Starter — 1 style', 2: 'Growth — up to 2 styles', 4: 'Pro — all 4 styles' };
+
+  document.getElementById('styleLabel').textContent =
+    'Choose your style — select up to ' + planAllowed;
+  document.getElementById('planBadge').textContent =
+    '📦 ' + (planNames[planAllowed] || 'up to ' + planAllowed + ' style' + (planAllowed > 1 ? 's' : ''));
+
   function toggleStyle(el) {
+    if (el.classList.contains('locked')) return;
     const style = el.dataset.style;
     if (el.classList.contains('selected')) {
       el.classList.remove('selected');
       selectedStyles = selectedStyles.filter(s => s !== style);
     } else {
+      if (selectedStyles.length >= planAllowed) return;
       el.classList.add('selected');
       selectedStyles.push(style);
     }
+    updateLocks();
     updateGenerateBtn();
+  }
+
+  function updateLocks() {
+    const atLimit = selectedStyles.length >= planAllowed;
+    document.querySelectorAll('.style-opt').forEach(el => {
+      if (!el.classList.contains('selected')) {
+        el.classList.toggle('locked', atLimit);
+      } else {
+        el.classList.remove('locked');
+      }
+    });
   }
 
   const dropzone  = document.getElementById('dropzone');
