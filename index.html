@@ -258,25 +258,24 @@
 
     /* ── PRICING ── */
     .pricing {
-      background: #f5f5fa;
-      color: #111;
+      background: var(--bg2);
+      color: var(--text);
       text-align: center;
     }
-    .pricing .section-label { color: var(--accent); }
     .mbg-badge {
       display: inline-block;
-      background: #fff; border: 1px solid #dde;
-      color: #444; font-size: 0.8rem; font-weight: 600;
+      background: rgba(124,92,252,0.12); border: 1px solid rgba(124,92,252,0.3);
+      color: #b39dff; font-size: 0.8rem; font-weight: 600;
       padding: 0.3rem 1rem; border-radius: 999px;
       margin-bottom: 1.25rem;
     }
     .pricing-heading {
       font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 900; line-height: 1.15; margin-bottom: 0.85rem; color: #111;
+      font-weight: 900; line-height: 1.15; margin-bottom: 0.85rem; color: var(--text);
     }
     .pricing-heading .ph-accent { color: var(--accent); }
-    .pricing-sub { font-size: 0.95rem; color: #666; margin-bottom: 3rem; }
-    .pricing-sub a { color: #666; text-decoration: underline; }
+    .pricing-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 3rem; }
+    .pricing-sub a { color: var(--muted); text-decoration: underline; }
 
     /* style collage previews */
     .style-previews {
@@ -292,8 +291,8 @@
     }
     .style-collage img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .style-collage img:first-child { grid-row: 1 / 3; }
-    .style-preview-name { font-size: 0.92rem; font-weight: 700; color: #111; margin-bottom: 0.15rem; }
-    .style-preview-desc { font-size: 0.75rem; color: #888; }
+    .style-preview-name { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+    .style-preview-desc { font-size: 0.75rem; color: var(--muted); }
 
     /* pricing cards */
     .pricing-grid {
@@ -302,13 +301,13 @@
       align-items: start;
     }
     .pricing-card {
-      background: #fff; border: 1.5px solid #e2e2ee;
+      background: var(--bg3); border: 1.5px solid var(--border);
       border-radius: 16px; padding: 2rem 1.5rem;
       position: relative; text-align: left;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .pricing-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-    .pricing-card.featured { border-color: var(--accent2); padding-top: 2.75rem; }
+    .pricing-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .pricing-card.featured { border-color: var(--accent); padding-top: 2.75rem; }
     .popular-badge {
       position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
       background: linear-gradient(135deg, var(--accent2), #ff8c69);
@@ -316,13 +315,13 @@
       padding: 0.3rem 1.1rem; border-radius: 999px;
       letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
     }
-    .plan-name { font-size: 1.1rem; font-weight: 800; color: #111; margin-bottom: 0.6rem; }
+    .plan-name { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 0.6rem; }
     .plan-price-row { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.4rem; }
-    .plan-price { font-size: 2.4rem; font-weight: 900; color: #111; line-height: 1; }
+    .plan-price { font-size: 2.4rem; font-weight: 900; color: var(--text); line-height: 1; }
     .plan-price-orig { font-size: 1rem; color: var(--accent2); text-decoration: line-through; }
-    .plan-desc { font-size: 0.83rem; color: #777; margin-bottom: 1.4rem; }
+    .plan-desc { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.4rem; }
     .plan-features { list-style: none; margin-bottom: 1.75rem; display: flex; flex-direction: column; gap: 0.55rem; }
-    .plan-features li { display: flex; align-items: center; gap: 0.55rem; font-size: 0.88rem; color: #333; }
+    .plan-features li { display: flex; align-items: center; gap: 0.55rem; font-size: 0.88rem; color: var(--text); }
     .check { color: var(--green); font-weight: 800; flex-shrink: 0; }
     .plan-cta {
       display: block; width: 100%; padding: 0.85rem 1rem;
