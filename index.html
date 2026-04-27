@@ -145,24 +145,33 @@
     .center .section-sub { margin: 0 auto; }
 
     /* ── BEFORE/AFTER SHOWCASE ── */
-    .showcase { background: var(--bg2); }
-    .before-after-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 2rem;
+    .showcase { background: var(--bg2); padding-left: 0; padding-right: 0; }
+    .showcase .section-header { padding: 0 5%; }
+    .carousel-wrap {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .carousel-track {
+      display: flex; gap: 1.25rem;
+      width: max-content;
+      animation: carousel-scroll 40s linear infinite;
+    }
+    .carousel-track:hover { animation-play-state: paused; }
+    @keyframes carousel-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
     .ba-card {
+      width: 300px; flex-shrink: 0;
       background: var(--bg3); border: 1px solid var(--border);
       border-radius: 16px; overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
     }
     .ba-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(124,92,252,0.2); }
-    .ba-image img {
-      width: 100%; display: block; object-fit: cover;
-    }
-    .ba-caption {
-      padding: 1rem 1.25rem 1.25rem;
-    }
+    .ba-image img { width: 100%; display: block; object-fit: cover; }
+    .ba-caption { padding: 1rem 1.25rem 1.25rem; }
     .ba-caption h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
     .ba-caption p { font-size: 0.82rem; color: var(--muted); }
     .ai-badge {
@@ -435,63 +444,94 @@
     <h2 class="section-title">See the Transformation</h2>
     <p class="section-sub">Upload a plain product shot. Get back a studio-ready image. No lights, no camera, no waiting.</p>
   </div>
-  <div class="before-after-grid">
+  <div class="carousel-wrap">
+    <div class="carousel-track">
 
-    <div class="ba-card">
-      <div class="ba-image">
-        <img src="photos2.png" alt="Before and after – multiple headshot transformations" />
+      <!-- original set -->
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos5.PNG" alt="Before and after – casual to professional female headshot" /></div>
+        <div class="ba-caption">
+          <h3>Look the Part, Instantly</h3>
+          <p>No studio, no retoucher. Just upload and let PixelShot do the rest.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
       </div>
-      <div class="ba-caption">
-        <h3>Every Style, Every Look</h3>
-        <p>PixelShot generates multiple styles from a single upload — confident, approachable, or executive. Pick what works best for you.</p>
-        <span class="ai-badge">100% AI Generated</span>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos2.png" alt="Before and after – multiple headshot transformations" /></div>
+        <div class="ba-caption">
+          <h3>Every Style, Every Look</h3>
+          <p>Multiple styles from a single upload — confident, approachable, or executive.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
       </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos1.png" alt="Before and after – casual to professional headshot" /></div>
+        <div class="ba-caption">
+          <h3>Casual to Professional</h3>
+          <p>A simple selfie transformed into a polished headshot — ready for LinkedIn.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos3.png" alt="Before and after – diverse headshot results grid" /></div>
+        <div class="ba-caption">
+          <h3>Works for Everyone</h3>
+          <p>Stunning results across all styles and backgrounds. Upload once, get a full set.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos4.PNG" alt="Before and after – casual to professional male headshot" /></div>
+        <div class="ba-caption">
+          <h3>First Impression, Upgraded</h3>
+          <p>From a casual selfie to a sharp, confident professional portrait — in minutes.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+
+      <!-- duplicate set for seamless loop -->
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos5.PNG" alt="Before and after – casual to professional female headshot" /></div>
+        <div class="ba-caption">
+          <h3>Look the Part, Instantly</h3>
+          <p>No studio, no retoucher. Just upload and let PixelShot do the rest.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos2.png" alt="Before and after – multiple headshot transformations" /></div>
+        <div class="ba-caption">
+          <h3>Every Style, Every Look</h3>
+          <p>Multiple styles from a single upload — confident, approachable, or executive.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos1.png" alt="Before and after – casual to professional headshot" /></div>
+        <div class="ba-caption">
+          <h3>Casual to Professional</h3>
+          <p>A simple selfie transformed into a polished headshot — ready for LinkedIn.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos3.png" alt="Before and after – diverse headshot results grid" /></div>
+        <div class="ba-caption">
+          <h3>Works for Everyone</h3>
+          <p>Stunning results across all styles and backgrounds. Upload once, get a full set.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-image"><img src="photos4.PNG" alt="Before and after – casual to professional male headshot" /></div>
+        <div class="ba-caption">
+          <h3>First Impression, Upgraded</h3>
+          <p>From a casual selfie to a sharp, confident professional portrait — in minutes.</p>
+          <span class="ai-badge">100% AI Generated</span>
+        </div>
+      </div>
+
     </div>
-
-    <div class="ba-card">
-      <div class="ba-image">
-        <img src="photos1.png" alt="Before and after – casual to professional headshot" />
-      </div>
-      <div class="ba-caption">
-        <h3>Casual to Professional</h3>
-        <p>A simple selfie transformed into a polished, studio-quality professional headshot — ready for LinkedIn or your company page.</p>
-        <span class="ai-badge">100% AI Generated</span>
-      </div>
-    </div>
-
-    <div class="ba-card">
-      <div class="ba-image">
-        <img src="photos3.png" alt="Before and after – diverse headshot results grid" />
-      </div>
-      <div class="ba-caption">
-        <h3>Works for Everyone</h3>
-        <p>PixelShot delivers stunning results across all styles and backgrounds. Upload once, get a full set of professional headshots.</p>
-        <span class="ai-badge">100% AI Generated</span>
-      </div>
-    </div>
-
-    <div class="ba-card">
-      <div class="ba-image">
-        <img src="photos4.PNG" alt="Before and after – casual to professional male headshot" />
-      </div>
-      <div class="ba-caption">
-        <h3>First Impression, Upgraded</h3>
-        <p>From a casual selfie to a sharp, confident professional portrait — in minutes, not hours.</p>
-        <span class="ai-badge">100% AI Generated</span>
-      </div>
-    </div>
-
-    <div class="ba-card">
-      <div class="ba-image">
-        <img src="photos5.PNG" alt="Before and after – casual to professional female headshot" />
-      </div>
-      <div class="ba-caption">
-        <h3>Look the Part, Instantly</h3>
-        <p>No studio, no makeup artist, no retoucher. Just upload a photo and let PixelShot do the rest.</p>
-        <span class="ai-badge">100% AI Generated</span>
-      </div>
-    </div>
-
   </div>
 </section>
 
