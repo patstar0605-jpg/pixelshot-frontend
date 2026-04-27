@@ -148,7 +148,7 @@
     .showcase { background: var(--bg2); }
     .before-after-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       gap: 2rem;
     }
     .ba-card {
@@ -157,36 +157,9 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     .ba-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(124,92,252,0.2); }
-    .ba-images {
-      display: grid; grid-template-columns: 1fr 1fr;
-      position: relative;
+    .ba-image img {
+      width: 100%; display: block; object-fit: cover;
     }
-    .ba-images img {
-      width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
-    }
-    .ba-divider {
-      position: absolute; left: 50%; top: 0; bottom: 0;
-      width: 2px; background: var(--accent);
-      transform: translateX(-50%);
-    }
-    .ba-divider-dot {
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      width: 28px; height: 28px; border-radius: 50%;
-      background: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 800; color: #fff;
-      box-shadow: 0 0 0 4px rgba(124,92,252,0.3);
-    }
-    .ba-labels {
-      display: grid; grid-template-columns: 1fr 1fr;
-    }
-    .ba-label {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    }
-    .ba-label.before { color: var(--muted); background: rgba(255,255,255,0.03); }
-    .ba-label.after { color: var(--accent); background: rgba(124,92,252,0.08); text-align: right; }
     .ba-caption {
       padding: 1rem 1.25rem 1.25rem;
     }
@@ -465,39 +438,23 @@
   <div class="before-after-grid">
 
     <div class="ba-card">
-      <div class="ba-images">
-        <img src="photos1.png" alt="Before – original product photo" />
-        <img src="photos2.png" alt="After – AI enhanced product photo" />
-        <div class="ba-divider">
-          <div class="ba-divider-dot">VS</div>
-        </div>
-      </div>
-      <div class="ba-labels">
-        <div class="ba-label before">Before</div>
-        <div class="ba-label after">After ✦</div>
+      <div class="ba-image">
+        <img src="photos1.png" alt="Before and after – casual to professional headshot" />
       </div>
       <div class="ba-caption">
-        <h3>Product on White Background</h3>
-        <p>Plain snapshot transformed into a clean, high-end e-commerce image with perfect lighting.</p>
+        <h3>Casual to Professional</h3>
+        <p>A simple selfie transformed into a polished, studio-quality professional headshot — ready for LinkedIn or your company page.</p>
         <span class="ai-badge">100% AI Generated</span>
       </div>
     </div>
 
     <div class="ba-card">
-      <div class="ba-images">
-        <img src="photos2.png" alt="Before – raw product photo" />
-        <img src="photos1.png" alt="After – lifestyle product photo" />
-        <div class="ba-divider">
-          <div class="ba-divider-dot">VS</div>
-        </div>
-      </div>
-      <div class="ba-labels">
-        <div class="ba-label before">Before</div>
-        <div class="ba-label after">After ✦</div>
+      <div class="ba-image">
+        <img src="photos2.png" alt="Before and after – multiple headshot transformations" />
       </div>
       <div class="ba-caption">
-        <h3>Lifestyle Scene Placement</h3>
-        <p>Your product placed in a beautiful lifestyle context — perfect for social media and ads.</p>
+        <h3>Every Style, Every Look</h3>
+        <p>PixelShot generates multiple styles from a single upload — confident, approachable, or executive. Pick what works best for you.</p>
         <span class="ai-badge">100% AI Generated</span>
       </div>
     </div>
