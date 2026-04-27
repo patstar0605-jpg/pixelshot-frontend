@@ -256,6 +256,45 @@
     .tcard-name { font-size: 0.85rem; font-weight: 700; }
     .tcard-role { font-size: 0.75rem; color: var(--muted); }
 
+    /* ── STYLES ── */
+    .styles-section { background: var(--bg); }
+    .styles-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) {
+      .styles-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .style-card {
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .style-card img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+    }
+    .style-card-body {
+      padding: 0.9rem 0.75rem 1rem;
+    }
+    .style-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .style-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
     /* ── PRICING ── */
     .pricing { background: var(--bg2); }
     .pricing-grid {
@@ -697,6 +736,45 @@
   </div>
 </section>
 
+<!-- STYLES -->
+<section class="styles-section" id="styles">
+  <div class="section-header center">
+    <span class="section-label">Styles</span>
+    <h2 class="section-title">4 Styles to Choose From</h2>
+    <p class="section-sub">Pick the look that fits you best — or get all four.</p>
+  </div>
+  <div class="styles-grid">
+    <div class="style-card">
+      <img src="photos1.png" alt="Classy style headshot" />
+      <div class="style-card-body">
+        <div class="style-name">Classy</div>
+        <div class="style-desc">Perfect for suit wearers</div>
+      </div>
+    </div>
+    <div class="style-card">
+      <img src="photos2.png" alt="Casual style headshot" />
+      <div class="style-card-body">
+        <div class="style-name">Casual</div>
+        <div class="style-desc">Perfect for LinkedIn</div>
+      </div>
+    </div>
+    <div class="style-card">
+      <img src="photos5.PNG" alt="Everyday style headshot" />
+      <div class="style-card-body">
+        <div class="style-name">Everyday</div>
+        <div class="style-desc">Perfect for Instagram</div>
+      </div>
+    </div>
+    <div class="style-card">
+      <img src="photos4.PNG" alt="Highperformer style headshot" />
+      <div class="style-card-body">
+        <div class="style-name">Highperformer</div>
+        <div class="style-desc">Show what you got</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- PRICING -->
 <section class="pricing" id="pricing">
   <div class="section-header center">
@@ -724,8 +802,8 @@
     <div class="pricing-card featured">
       <div class="popular-badge">Most Popular</div>
       <div class="plan-name">Growth</div>
-      <div class="plan-price">€17.99</div>
-      <div class="plan-price-orig">Was €29.98</div>
+      <div class="plan-price">€12.98</div>
+      <div class="plan-price-orig">Was €19.98</div>
       <div class="plan-desc">Best value for growing stores.</div>
       <ul class="plan-features">
         <li><span class="check">✓</span> 80 AI-generated images</li>
@@ -741,8 +819,8 @@
 
     <div class="pricing-card">
       <div class="plan-name">Pro</div>
-      <div class="plan-price">€27.99</div>
-      <div class="plan-price-orig">Was €59.96</div>
+      <div class="plan-price">€15.96</div>
+      <div class="plan-price-orig">Was €39.96</div>
       <div class="plan-desc">For brands launching full product lines.</div>
       <ul class="plan-features">
         <li><span class="check">✓</span> 160 AI-generated images</li>
