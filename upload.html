@@ -632,18 +632,40 @@
     document.getElementById('generateBtn').disabled = n < 10 || selectedStyles.length === 0;
   }
 
-  function startProcessing() {
+  const jobId = new URLSearchParams(location.search).get('jobId');
+
+  async function startProcessing() {
+    if (!jobId) {
+      alert('No job ID found. Please start from the pricing page.');
+      return;
+    }
+
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
     document.getElementById('overlay').classList.add('active');
-    const steps = ['ps1','ps2','ps3','ps4'];
-    steps.forEach((id, i) => {
-      setTimeout(() => {
-        if (i > 0) document.getElementById(steps[i - 1]).className = 'proc-step done';
-        document.getElementById(id).className = 'proc-step active';
-      }, i * 1800);
-    });
-    setTimeout(() => window.location.href = 'results.html', steps.length * 1800 + 600);
+
+    try {
+      const form = new FormData();
+      files.forEach(f => form.append('photos', f));
+      selectedStyles.forEach(s => form.append('styles', s));
+
+      const res = await fetch(API_BASE + `/api/upload/${jobId}`, { method: 'POST', body: form });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `HTTP ${res.status}`);
+      }
+
+      window.location.href = `waiting.html?jobId=${jobId}`;
+    } catch (err) {
+      document.getElementById('overlay').classList.remove('active');
+      btn.disabled = false;
+      btn.textContent = 'Generate My Headshots';
+      alert('Upload failed: ' + err.message);
+    }
   }
 </script>
+<script src="js/config.js"></script>
 
 </body>
 </html>

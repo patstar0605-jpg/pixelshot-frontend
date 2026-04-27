@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PixelShot – Processing Your Headshots</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0f;
+      --bg2:      #111118;
+      --bg3:      #16161f;
+      --border:   #2a2a3a;
+      --text:     #e8e8f0;
+      --muted:    #8888aa;
+      --accent:   #7c5cfc;
+      --accent-h: #9474ff;
+      --accent2:  #fc5c7d;
+      --green:    #22c55e;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+      background: rgba(10,10,15,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px 48px;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .spinner {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      animation: spin 0.85s linear infinite;
+      margin: 0 auto 2rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .card h1 {
+      font-size: 1.6rem; font-weight: 900;
+      letter-spacing: -0.5px; margin-bottom: 0.75rem;
+    }
+    .card h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .card p {
+      font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;
+    }
+
+    .steps {
+      display: flex; flex-direction: column; gap: 0.6rem;
+      text-align: left; margin-bottom: 2rem;
+    }
+    .step {
+      display: flex; align-items: center; gap: 0.65rem;
+      font-size: 0.85rem; color: var(--muted);
+      transition: color 0.3s;
+    }
+    .step.active { color: var(--accent); }
+    .step.done   { color: var(--green); }
+    .step-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: currentColor; flex-shrink: 0;
+    }
+
+    .status-note {
+      font-size: 0.75rem; color: var(--muted);
+      border-top: 1px solid var(--border); padding-top: 1.25rem;
+    }
+    .status-note span { color: var(--text); font-weight: 600; }
+
+    .error-box {
+      display: none;
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.3);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: #f87171;
+      margin-bottom: 1.5rem;
+    }
+    .retry-btn {
+      display: inline-block;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.875rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .retry-btn:hover { background: var(--accent-h); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">PixelShot</a>
+</nav>
+
+<main class="main">
+  <div class="card">
+    <div class="spinner" id="spinner"></div>
+
+    <h1>Processing your <span>headshots…</span></h1>
+    <p>Our AI is generating your professional headshots. This usually takes 2–4 hours. You can keep this tab open or come back later.</p>
+
+    <div class="steps">
+      <div class="step active" id="step1"><div class="step-dot"></div> Analysing your photos</div>
+      <div class="step"        id="step2"><div class="step-dot"></div> Training your personal AI model</div>
+      <div class="step"        id="step3"><div class="step-dot"></div> Generating headshots</div>
+      <div class="step"        id="step4"><div class="step-dot"></div> Quality check &amp; delivery</div>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <p class="status-note">Checking for results every 10 seconds &nbsp;·&nbsp; <span id="checkCount">0</span> checks so far</p>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const jobId  = params.get('jobId');
+
+  if (!jobId) {
+    document.querySelector('.card h1').textContent = 'Missing job ID';
+    document.getElementById('spinner').style.display = 'none';
+  }
+
+  const stepIds = ['step1', 'step2', 'step3', 'step4'];
+  let checks = 0;
+  let currentStep = 0;
+
+  function advanceStep() {
+    if (currentStep < stepIds.length - 1) {
+      document.getElementById(stepIds[currentStep]).className = 'step done';
+      currentStep++;
+      document.getElementById(stepIds[currentStep]).className = 'step active';
+    }
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.style.display = 'block';
+    box.textContent = msg;
+  }
+
+  async function poll() {
+    if (!jobId) return;
+
+    try {
+      const data = await apiFetch(`/api/results/${jobId}`);
+
+      checks++;
+      document.getElementById('checkCount').textContent = checks;
+      advanceStep();
+
+      if (data.status === 'complete') {
+        stepIds.forEach(id => document.getElementById(id).className = 'step done');
+        window.location.href = `results.html?jobId=${jobId}`;
+        return;
+      }
+
+      setTimeout(poll, 10000);
+    } catch (err) {
+      showError('Error checking status: ' + err.message + ' — retrying in 10s');
+      setTimeout(poll, 10000);
+    }
+  }
+
+  if (jobId) setTimeout(poll, 10000);
+</script>
+</body>
+</html>
