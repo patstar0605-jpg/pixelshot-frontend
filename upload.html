@@ -650,11 +650,7 @@
       files.forEach(f => form.append('photos', f));
       selectedStyles.forEach(s => form.append('styles', s));
 
-      const res = await fetch(API_BASE + `/api/upload/${jobId}`, { method: 'POST', body: form });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || `HTTP ${res.status}`);
-      }
+      await apiFetch(`/api/upload/${jobId}`, { method: 'POST', body: form });
 
       window.location.href = `waiting.html?jobId=${jobId}`;
     } catch (err) {
