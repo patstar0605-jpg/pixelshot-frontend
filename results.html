@@ -27,10 +27,7 @@
     background: var(--warm-black); padding: 56px 60px; text-align: center;
     position: relative; overflow: hidden;
   }
-  .hero-banner::before {
-    content: '✦'; position: absolute; font-size: 20rem; color: rgba(201,168,76,0.04);
-    top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
-  }
+  .hero-banner::before { display: none; }
   .ready-badge {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(201,168,76,0.15); color: var(--gold);
@@ -212,18 +209,18 @@
 
 <nav>
   <a href="index.html" class="nav-logo">Pixel<span>Shot</span></a>
-  <a href="#" class="download-all-btn" style="padding:9px 18px;font-size:0.85rem" onclick="alert('Downloading all 40 photos as ZIP...')">⬇ Download All</a>
+  <a href="#" class="download-all-btn" style="padding:9px 18px;font-size:0.85rem" onclick="alert('Downloading all 40 photos as ZIP...')"><svg style="width:14px;height:14px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All</a>
 </nav>
 
 <!-- HERO BANNER -->
 <div class="hero-banner">
-  <div class="ready-badge">✦ Ready to download</div>
+  <div class="ready-badge">Ready to download</div>
   <h1>Your headshots are<br><em>here.</em></h1>
   <p>40 AI-generated professional headshots across 2 styles — ready to use on LinkedIn, your website, or anywhere you need to look your best.</p>
-  <button class="download-all-btn" onclick="alert('Downloading all 40 photos as ZIP...')">⬇ Download All 40 Photos</button>
+  <button class="download-all-btn" onclick="alert('Downloading all 40 photos as ZIP...')"><svg style="width:15px;height:15px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All 40 Photos</button>
   <div class="share-row">
     <a href="#" class="share-btn share-linkedin">in Update LinkedIn →</a>
-    <button class="share-btn share-copy" onclick="copyLink()">🔗 Copy share link</button>
+    <button class="share-btn share-copy" onclick="copyLink()"><svg style="width:13px;height:13px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy share link</button>
   </div>
 </div>
 
@@ -239,19 +236,19 @@
 <div class="filter-bar">
   <span class="filter-label">Filter</span>
   <button class="filter-btn active" onclick="filterGallery('all', this)">All (40)</button>
-  <button class="filter-btn" onclick="filterGallery('professional', this)">👔 Professional</button>
-  <button class="filter-btn" onclick="filterGallery('casual', this)">😎 Casual</button>
+  <button class="filter-btn" onclick="filterGallery('professional', this)">Professional</button>
+  <button class="filter-btn" onclick="filterGallery('casual', this)">Casual</button>
   <button class="filter-btn gold-btn" onclick="filterGallery('favorites', this)">★ Favorites</button>
   <div class="spacer"></div>
   <div class="view-toggle">
-    <button class="view-btn active" onclick="setView('small', this)">⊞</button>
-    <button class="view-btn" onclick="setView('large', this)">⊟</button>
+    <button class="view-btn active" onclick="setView('small', this)"><svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+    <button class="view-btn" onclick="setView('large', this)"><svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="8"/><rect x="3" y="13" width="18" height="8"/></svg></button>
   </div>
 </div>
 
 <!-- FEEDBACK BANNER -->
 <div class="feedback-banner">
-  <span>🎉</span>
+  <svg style="width:18px;height:18px;flex-shrink:0;color:#C9A84C" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
   <div class="feedback-text">
     <strong>Happy with your results?</strong>
     Leave a review and get 20 bonus headshots free.
@@ -274,7 +271,7 @@
     </div>
     <button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('active')">×</button>
     <div class="lightbox-actions">
-      <button class="lb-btn lb-dl" onclick="alert('Downloading full-res image...')">⬇ Download Full Res</button>
+      <button class="lb-btn lb-dl" onclick="alert('Downloading full-res image...')"><svg style="width:14px;height:14px;flex-shrink:0;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Full Res</button>
       <button class="lb-btn lb-fav" id="lbFavBtn" onclick="toggleFavFromLightbox()">★ Favourite</button>
     </div>
   </div>
@@ -288,7 +285,7 @@
 
   const photos = Array.from({length: 40}, (_, i) => ({
     id: i, style: i % 2 === 0 ? 'professional' : 'casual',
-    bg: bgs[i % bgs.length], label: i % 2 === 0 ? '👔 Professional' : '😎 Casual'
+    bg: bgs[i % bgs.length], label: i % 2 === 0 ? 'Professional' : 'Casual'
   }));
 
   let filtered = [...photos];
@@ -314,7 +311,7 @@
             ${isFav ? '★' : '☆'}
           </button>
           <div class="photo-actions">
-            <button class="action-btn dl-btn" onclick="event.stopPropagation(); alert('Downloading...')">⬇ Save</button>
+            <button class="action-btn dl-btn" onclick="event.stopPropagation(); alert('Downloading...')"><svg style="width:12px;height:12px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Save</button>
           </div>
         </div>
         <div class="style-tag">${photo.label}</div>`;
