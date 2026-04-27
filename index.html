@@ -782,7 +782,7 @@
         <li><span class="check">✓</span> 40 headshots</li>
         <li><span class="check">✓</span> 1 unique style</li>
       </ul>
-      <a href="upload.html?plan=1" class="plan-cta">Get 40 headshots in 4 hours</a>
+      <button class="plan-cta" onclick="checkout('starter', this)">Get 40 headshots in 4 hours</button>
     </div>
 
     <div class="pricing-card featured">
@@ -799,7 +799,7 @@
         <li><span class="check">✓</span> 2 unique styles</li>
         <li><span class="check">✓</span> 100% money back guarantee</li>
       </ul>
-      <a href="upload.html?plan=2" class="plan-cta">Get 80 headshots in 3 hours!</a>
+      <button class="plan-cta" onclick="checkout('value', this)">Get 80 headshots in 3 hours!</button>
     </div>
 
     <div class="pricing-card">
@@ -814,7 +814,7 @@
         <li><span class="check">✓</span> 160 headshots</li>
         <li><span class="check">✓</span> 4 unique styles</li>
       </ul>
-      <a href="upload.html?plan=4" class="plan-cta">Get 160 headshots in 2.5 hours</a>
+      <button class="plan-cta" onclick="checkout('pro', this)">Get 160 headshots in 2.5 hours</button>
     </div>
 
   </div>
@@ -928,6 +928,26 @@
       if (!wasOpen) item.classList.add('open');
     });
   });
+</script>
+
+<script src="js/config.js"></script>
+<script>
+  async function checkout(plan, btn) {
+    const original = btn.textContent;
+    btn.textContent = 'Loading…';
+    btn.disabled = true;
+    try {
+      const data = await apiFetch('/api/checkout', {
+        method: 'POST',
+        body: JSON.stringify({ plan }),
+      });
+      window.location.href = data.url;
+    } catch (err) {
+      btn.textContent = original;
+      btn.disabled = false;
+      alert('Could not start checkout. Please try again.');
+    }
+  }
 </script>
 
 </body>
