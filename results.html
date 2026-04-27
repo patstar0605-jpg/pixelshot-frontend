@@ -254,7 +254,7 @@
 
 <nav>
   <a href="index.html" class="nav-logo">PixelShot</a>
-  <a href="#" class="download-all-btn" style="padding:9px 18px;font-size:0.85rem" onclick="alert('Downloading all 40 photos as ZIP...')"><svg style="width:14px;height:14px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All</a>
+  <a href="#" class="download-all-btn" style="padding:9px 18px;font-size:0.85rem" onclick="event.preventDefault();downloadAll()"><svg style="width:14px;height:14px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All</a>
 </nav>
 
 <!-- HERO BANNER -->
@@ -262,7 +262,7 @@
   <div class="ready-badge">Ready to download</div>
   <h1>Your headshots are<br><em>here.</em></h1>
   <p>40 AI-generated professional headshots across 2 styles — ready to use on LinkedIn, your website, or anywhere you need to look your best.</p>
-  <button class="hero-dl-btn" onclick="alert('Downloading all 40 photos as ZIP...')"><svg style="width:15px;height:15px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All 40 Photos</button>
+  <button class="hero-dl-btn" id="heroDownloadBtn" onclick="downloadAll()"><svg style="width:15px;height:15px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download All 40 Photos</button>
   <div class="share-row">
     <a href="#" class="share-btn share-linkedin">in Update LinkedIn →</a>
     <button class="share-btn share-copy" onclick="copyLink()"><svg style="width:13px;height:13px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy share link</button>
@@ -278,12 +278,10 @@
 </div>
 
 <!-- FILTER BAR -->
-<div class="filter-bar">
+<div class="filter-bar" id="filterBar">
   <span class="filter-label">Filter</span>
-  <button class="filter-btn active" onclick="filterGallery('all', this)">All (40)</button>
-  <button class="filter-btn" onclick="filterGallery('professional', this)">Professional</button>
-  <button class="filter-btn" onclick="filterGallery('casual', this)">Casual</button>
-  <button class="filter-btn fav-btn-filter" onclick="filterGallery('favorites', this)">★ Favorites</button>
+  <button class="filter-btn active" data-filter="all" onclick="filterGallery('all', this)">All</button>
+  <button class="filter-btn fav-btn-filter" data-filter="favorites" onclick="filterGallery('favorites', this)">★ Favorites</button>
   <div class="spacer"></div>
   <div class="view-toggle">
     <button class="view-btn active" onclick="setView('small', this)"><svg style="width:14px;height:14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
@@ -316,47 +314,107 @@
     </div>
     <button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('active')">×</button>
     <div class="lightbox-actions">
-      <button class="lb-btn lb-dl" onclick="alert('Downloading full-res image...')"><svg style="width:14px;height:14px;flex-shrink:0;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Full Res</button>
+      <button class="lb-btn lb-dl" id="lbDownloadBtn"><svg style="width:14px;height:14px;flex-shrink:0;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Full Res</button>
       <button class="lb-btn lb-fav" id="lbFavBtn" onclick="toggleFavFromLightbox()">★ Favourite</button>
     </div>
   </div>
 </div>
 
+<script src="js/config.js"></script>
 <script>
-  const styles = ['Professional','Professional','Casual','Casual'];
-  const bgs = ['hs-1','hs-2','hs-3','hs-4','hs-5','hs-6','hs-7','hs-8'];
+  const jobId    = new URLSearchParams(location.search).get('jobId');
   const favorites = new Set();
+  let photos  = [];
+  let filtered = [];
   let currentIdx = 0;
 
-  const photos = Array.from({length: 40}, (_, i) => ({
-    id: i, style: i % 2 === 0 ? 'professional' : 'casual',
-    bg: bgs[i % bgs.length], label: i % 2 === 0 ? 'Professional' : 'Casual'
-  }));
+  /* ── Bootstrap ── */
+  async function loadResults() {
+    if (!jobId) { showGalleryError('No job ID in URL. Please start from the beginning.'); return; }
 
-  let filtered = [...photos];
+    try {
+      const data = await apiFetch(`/api/results/${jobId}`);
 
+      if (data.status !== 'complete') {
+        window.location.href = `waiting.html?jobId=${jobId}`;
+        return;
+      }
+
+      const images = data.images || data.photos || data.results || [];
+      photos = images.map((img, i) => ({
+        id:    i,
+        url:   typeof img === 'string' ? img : (img.url || img.image_url),
+        style: (typeof img === 'object' && img.style ? img.style : 'headshot').toLowerCase(),
+        label: typeof img === 'object' && img.style ? img.style : 'Headshot',
+      }));
+      filtered = [...photos];
+
+      /* update hero + stats */
+      const count = photos.length;
+      const styleSet = [...new Set(photos.map(p => p.label))];
+      document.querySelector('.hero-banner p').textContent =
+        `${count} AI-generated professional headshots across ${styleSet.length} style${styleSet.length !== 1 ? 's' : ''} — ready to use anywhere.`;
+      document.querySelector('#heroDownloadBtn').textContent = `Download All ${count} Photos`;
+      document.querySelectorAll('.stat-n')[0].textContent = count;
+      document.querySelectorAll('.stat-n')[1].textContent = styleSet.length;
+
+      /* update filter bar */
+      rebuildFilters(styleSet);
+      renderGallery(filtered);
+    } catch (err) {
+      showGalleryError('Failed to load results: ' + err.message);
+    }
+  }
+
+  /* ── Filters ── */
+  function rebuildFilters(styleSet) {
+    const bar = document.getElementById('filterBar');
+    const allBtn = bar.querySelector('[data-filter="all"]');
+    allBtn.textContent = `All (${photos.length})`;
+    /* remove old dynamic filters */
+    bar.querySelectorAll('[data-filter="dynamic"]').forEach(el => el.remove());
+    const favBtn = bar.querySelector('[data-filter="favorites"]');
+    styleSet.forEach(style => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.filter = 'dynamic';
+      btn.textContent = style;
+      btn.onclick = () => filterGallery(style.toLowerCase(), btn);
+      bar.insertBefore(btn, favBtn);
+    });
+  }
+
+  function filterGallery(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if      (type === 'all')       filtered = [...photos];
+    else if (type === 'favorites') filtered = photos.filter(p => favorites.has(p.id));
+    else                           filtered = photos.filter(p => p.style === type);
+    renderGallery(filtered);
+  }
+
+  /* ── Gallery ── */
   function renderGallery(items) {
     const grid = document.getElementById('galleryGrid');
     grid.innerHTML = '';
+    if (!items.length) {
+      grid.innerHTML = '<p style="color:var(--muted);padding:2rem 0;grid-column:1/-1;text-align:center">No photos found.</p>';
+      return;
+    }
     items.forEach((photo, i) => {
-      const card = document.createElement('div');
-      card.className = 'photo-card';
-      card.dataset.id = photo.id;
-      card.dataset.idx = i;
       const isFav = favorites.has(photo.id);
+      const card  = document.createElement('div');
+      card.className   = 'photo-card';
+      card.dataset.id  = photo.id;
+      card.dataset.idx = i;
       card.innerHTML = `
-        <div class="photo-placeholder ${photo.bg}">
-          <svg class="ph-figure" viewBox="0 0 120 180" fill="none">
-            <ellipse cx="60" cy="52" rx="32" ry="38" fill="rgba(255,255,255,0.15)"/>
-            <rect x="15" y="95" width="90" height="85" rx="12" fill="rgba(255,255,255,0.08)"/>
-          </svg>
-        </div>
+        <img src="${photo.url}" alt="${photo.label}" style="width:100%;height:100%;object-fit:cover;display:block;">
         <div class="photo-overlay">
-          <button class="fav-btn ${isFav ? 'favorited' : ''}" onclick="toggleFav(event, ${photo.id}, this)">
-            ${isFav ? '★' : '☆'}
-          </button>
+          <button class="fav-btn ${isFav ? 'favorited' : ''}" onclick="toggleFav(event,${photo.id},this)">${isFav ? '★' : '☆'}</button>
           <div class="photo-actions">
-            <button class="action-btn dl-btn" onclick="event.stopPropagation(); alert('Downloading...')"><svg style="width:12px;height:12px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Save</button>
+            <button class="action-btn dl-btn" onclick="event.stopPropagation();downloadImage('${photo.url}','headshot-${i+1}.jpg')">
+              <svg style="width:12px;height:12px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Save
+            </button>
           </div>
         </div>
         <div class="style-tag">${photo.label}</div>`;
@@ -365,37 +423,39 @@
     });
   }
 
+  function showGalleryError(msg) {
+    document.getElementById('galleryGrid').innerHTML =
+      `<p style="color:var(--muted);padding:2rem 0;grid-column:1/-1;text-align:center">${msg}</p>`;
+  }
+
+  /* ── Download ── */
+  function downloadImage(url, filename) {
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.target = '_blank';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  function downloadAll() {
+    photos.forEach((p, i) => setTimeout(() => downloadImage(p.url, `headshot-${i+1}.jpg`), i * 150));
+  }
+
+  /* ── Favourites ── */
   function toggleFav(e, id, btn) {
     e.stopPropagation();
     if (favorites.has(id)) { favorites.delete(id); btn.textContent = '☆'; btn.classList.remove('favorited'); }
-    else { favorites.add(id); btn.textContent = '★'; btn.classList.add('favorited'); }
+    else                   { favorites.add(id);    btn.textContent = '★'; btn.classList.add('favorited'); }
   }
 
-  function filterGallery(type, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if (type === 'all') filtered = [...photos];
-    else if (type === 'favorites') filtered = photos.filter(p => favorites.has(p.id));
-    else filtered = photos.filter(p => p.style === type);
-    renderGallery(filtered);
-  }
-
-  function setView(size, btn) {
-    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const grid = document.getElementById('galleryGrid');
-    grid.classList.toggle('large', size === 'large');
-  }
-
+  /* ── Lightbox ── */
   function openLightbox(idx) {
     currentIdx = idx;
-    const lb = document.getElementById('lightbox');
-    const bg = document.getElementById('lightboxBg');
     const photo = filtered[idx];
-    bg.className = `photo-placeholder ${photo.bg}`;
-    bg.style.cssText = 'aspect-ratio:3/4;border-radius:14px';
-    lb.classList.add('active');
-    document.getElementById('lbFavBtn').textContent = favorites.has(photo.id) ? '★ Unfavourite' : '☆ Favourite';
+    const bg    = document.getElementById('lightboxBg');
+    bg.innerHTML = `<img src="${photo.url}" alt="${photo.label}" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:14px;display:block;">`;
+    bg.className = ''; bg.style.cssText = '';
+    document.getElementById('lbDownloadBtn').onclick = () => downloadImage(photo.url, `headshot-${idx+1}.jpg`);
+    document.getElementById('lbFavBtn').textContent  = favorites.has(photo.id) ? '★ Unfavourite' : '☆ Favourite';
+    document.getElementById('lightbox').classList.add('active');
   }
 
   function navLightbox(dir) {
@@ -406,7 +466,7 @@
   function toggleFavFromLightbox() {
     const photo = filtered[currentIdx];
     if (favorites.has(photo.id)) { favorites.delete(photo.id); document.getElementById('lbFavBtn').textContent = '☆ Favourite'; }
-    else { favorites.add(photo.id); document.getElementById('lbFavBtn').textContent = '★ Unfavourite'; }
+    else                         { favorites.add(photo.id);    document.getElementById('lbFavBtn').textContent = '★ Unfavourite'; }
   }
 
   function closeLightbox(e) {
@@ -417,15 +477,20 @@
     navigator.clipboard.writeText(window.location.href).then(() => alert('Link copied!'));
   }
 
+  function setView(size, btn) {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('galleryGrid').classList.toggle('large', size === 'large');
+  }
+
   document.addEventListener('keydown', e => {
-    if (document.getElementById('lightbox').classList.contains('active')) {
-      if (e.key === 'ArrowLeft') navLightbox(-1);
-      if (e.key === 'ArrowRight') navLightbox(1);
-      if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
-    }
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'ArrowLeft')  navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+    if (e.key === 'Escape')     document.getElementById('lightbox').classList.remove('active');
   });
 
-  renderGallery(photos);
+  loadResults();
 </script>
 </body>
 </html>
