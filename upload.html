@@ -245,6 +245,43 @@
     .tip-card.good .tip-body strong { color: var(--green); }
     .tip-card.bad  .tip-body strong { color: var(--red); }
 
+    /* ── STYLE SELECTOR ── */
+    .style-select-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .style-opt {
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg3);
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      user-select: none;
+      position: relative;
+    }
+    .style-opt:hover { border-color: rgba(124,92,252,0.5); transform: translateY(-2px); }
+    .style-opt.selected { border-color: var(--accent); }
+    .style-opt img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+    .style-opt-body { padding: 0.75rem 0.6rem 0.8rem; text-align: center; }
+    .style-opt-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+    .style-opt-desc { font-size: 0.72rem; color: var(--muted); }
+    .style-check {
+      position: absolute; top: 8px; right: 8px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(10,10,15,0.7); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: transparent;
+      transition: all 0.15s;
+    }
+    .style-opt.selected .style-check {
+      background: var(--accent); border-color: var(--accent); color: #fff;
+    }
+    .style-select-note {
+      font-size: 0.78rem; color: var(--muted); margin-top: 0.85rem; text-align: center;
+    }
+
     /* ── GENERATE BUTTON ── */
     .generate-wrap { text-align: center; }
     .generate-btn {
@@ -304,7 +341,7 @@
       nav { padding: 0 4%; }
       .nav-steps { display: none; }
       .container { padding: 36px 16px 60px; }
-      .style-grid { grid-template-columns: repeat(2, 1fr); }
+      .style-select-grid { grid-template-columns: repeat(2, 1fr); }
       .preview-grid { grid-template-columns: repeat(4, 1fr); }
       .tips-grid { grid-template-columns: 1fr; }
       .dropzone { padding: 36px 20px; }
@@ -409,6 +446,46 @@
     </div>
   </div>
 
+  <!-- STYLE SELECTION -->
+  <div class="section-gap">
+    <span class="section-label">Choose your style — select 1 to 4</span>
+    <div class="style-select-grid" id="styleGrid">
+      <div class="style-opt" data-style="classy" onclick="toggleStyle(this)">
+        <img src="photos1.png" alt="Classy headshot style" />
+        <div class="style-check">✓</div>
+        <div class="style-opt-body">
+          <div class="style-opt-name">Classy</div>
+          <div class="style-opt-desc">Perfect for suit wearers</div>
+        </div>
+      </div>
+      <div class="style-opt" data-style="casual" onclick="toggleStyle(this)">
+        <img src="photos2.png" alt="Casual headshot style" />
+        <div class="style-check">✓</div>
+        <div class="style-opt-body">
+          <div class="style-opt-name">Casual</div>
+          <div class="style-opt-desc">Perfect for LinkedIn</div>
+        </div>
+      </div>
+      <div class="style-opt" data-style="everyday" onclick="toggleStyle(this)">
+        <img src="photos5.PNG" alt="Everyday headshot style" />
+        <div class="style-check">✓</div>
+        <div class="style-opt-body">
+          <div class="style-opt-name">Everyday</div>
+          <div class="style-opt-desc">Perfect for Instagram</div>
+        </div>
+      </div>
+      <div class="style-opt" data-style="highperformer" onclick="toggleStyle(this)">
+        <img src="photos4.PNG" alt="Highperformer headshot style" />
+        <div class="style-check">✓</div>
+        <div class="style-opt-body">
+          <div class="style-opt-name">Highperformer</div>
+          <div class="style-opt-desc">Show what you got</div>
+        </div>
+      </div>
+    </div>
+    <p class="style-select-note">1 style — €9.99 &nbsp;·&nbsp; 2 styles — €12.98 &nbsp;·&nbsp; 4 styles — €15.96</p>
+  </div>
+
   <!-- GENERATE -->
   <div class="generate-wrap">
     <button class="generate-btn" id="generateBtn" disabled onclick="startProcessing()">
@@ -436,6 +513,19 @@
 
 <script>
   let files = [];
+  let selectedStyles = [];
+
+  function toggleStyle(el) {
+    const style = el.dataset.style;
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      selectedStyles = selectedStyles.filter(s => s !== style);
+    } else {
+      el.classList.add('selected');
+      selectedStyles.push(style);
+    }
+    updateGenerateBtn();
+  }
 
   const dropzone  = document.getElementById('dropzone');
   const fileInput = document.getElementById('fileInput');
@@ -502,8 +592,13 @@
     fill.style.width  = pct + '%';
     fill.className    = `counter-bar-fill ${tier}`;
 
-    document.getElementById('generateBtn').disabled = n < 10;
     document.getElementById('progressFill').style.width = n >= 10 ? '66%' : '33%';
+    updateGenerateBtn();
+  }
+
+  function updateGenerateBtn() {
+    const n = files.length;
+    document.getElementById('generateBtn').disabled = n < 10 || selectedStyles.length === 0;
   }
 
   function startProcessing() {
