@@ -284,13 +284,10 @@
     }
     .style-preview-item { text-align: center; }
     .style-collage {
-      display: grid; grid-template-columns: 2fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 4px; border-radius: 14px; overflow: hidden;
+      border-radius: 14px; overflow: hidden;
       margin-bottom: 0.85rem;
     }
-    .style-collage img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .style-collage img:first-child { grid-row: 1 / 3; }
+    .style-collage img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
     .style-preview-name { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
     .style-preview-desc { font-size: 0.75rem; color: var(--muted); }
 
@@ -744,8 +741,6 @@
     <div class="style-preview-item">
       <div class="style-collage">
         <img src="Classy.png" alt="Classy" />
-        <img src="photos1.png" alt="" />
-        <img src="photos3.png" alt="" />
       </div>
       <div class="style-preview-name">Classy</div>
       <div class="style-preview-desc">Perfect for suit wearers</div>
@@ -753,8 +748,6 @@
     <div class="style-preview-item">
       <div class="style-collage">
         <img src="Casual.png" alt="Casual" />
-        <img src="photos2.png" alt="" />
-        <img src="photos6.PNG" alt="" />
       </div>
       <div class="style-preview-name">Casual</div>
       <div class="style-preview-desc">Perfect for LinkedIn</div>
@@ -762,8 +755,6 @@
     <div class="style-preview-item">
       <div class="style-collage">
         <img src="Everyday.png" alt="Everyday" />
-        <img src="photos5.PNG" alt="" />
-        <img src="photos4.PNG" alt="" />
       </div>
       <div class="style-preview-name">Everyday</div>
       <div class="style-preview-desc">Perfect for Instagram</div>
@@ -771,8 +762,6 @@
     <div class="style-preview-item">
       <div class="style-collage">
         <img src="highperformer.png" alt="Highperformer" />
-        <img src="photos4.PNG" alt="" />
-        <img src="photos2.png" alt="" />
       </div>
       <div class="style-preview-name">Highperformer</div>
       <div class="style-preview-desc">Show what you got</div>
